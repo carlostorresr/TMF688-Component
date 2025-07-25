@@ -1,22 +1,64 @@
-# Example Product Inventory component (including Security_role)
+# TMF688-Component
 
-This is an example component that implements a TM Forum Product Inventory interface.
+Este repositorio contiene la implementación de un componente ODA basado en la especificación **TMF688 - Event Management API** del TM Forum.
 
-As part of the component implementation, it exposes role information to the Canvas using the TM Forum PartyRole API.
+## 🧩 Descripción
 
-The component implements 4 micro-services:
+El componente TMF688 permite la gestión de eventos, tópicos y suscripciones (`hub`) dentro del ecosistema ODA Canvas. Está diseñado para integrarse con otros componentes TMF y utiliza Kafka como bus de eventos.
 
-* Product Inventory Microservice that implements the TMF637 Product Inventory Management API (based on the NodeJs reference implementation). This is deployed as a Kubernetes Deployment.
-* Party Role Microservice that implements the TMF669 Party Role Management API (based on the NodeJs reference implementation). This is deployed as a Kubernetes Deployment.
-* Role Initialization Microservice that bootstraps the initial Party Role interface. This is deployed as a Kubernetes Job that runs once when the component is initialised.
-* a standard deployment of a mongoDb. This is deployed as a Kubernetes Deployment with a PersistentVolumeClaim.
+## 🚀 Tecnologías utilizadas
 
-The component envelope exposes the ProductInventory as a CoreFunction API and the PartyRole as a Security/PartyRole API.
+- Node.js 18+
+- Express.js
+- Kafka + Strimzi + Kafka Bridge
+- Swagger UI
+- Helm Charts para Kubernetes
+- Docker
+- Kubernetes
 
-The Kubernetes services adopt the Istio naming convention for the Port names.
+## 📁 Estructura del proyecto
 
-### API Path Discovery
-![API Paths Discovery](images/productinv-apipaths.png)
+```
+TMF688-Component/
+├── charts/                    # Helm chart para el despliegue
+├── src/                       # Código fuente backend en Node.js
+├── openapi/                   # Open API TMF688 (Swagger)
+├── oda.component.yaml         # Definición del componente ODA
+├── Dockerfile
+└── README.md
+```
 
-### API Docs - Swagger
-![API Docs -Swagger](images/productinventory-apidocs.png)
+## ⚙️ Despliegue
+
+### Despliegue local (modo desarrollo)
+
+```bash
+npm install
+npm start
+```
+
+Por defecto, la API se expone en: `http://localhost:3000/tmf-api/eventManagement/v4`
+
+### Despliegue en Kubernetes con Helm
+
+```bash
+helm install tmf688 ./charts/tmf688 -n components
+```
+
+Asegúrate de tener configurado tu `values.yaml` con la URL del Kafka Bridge y MongoDB si aplica.
+
+## 📌 Endpoints principales
+
+| Recurso | Método | Descripción |
+|---------|--------|-------------|
+| `/event` | POST / GET | Publicación y consulta de eventos |
+| `/topic` | GET         | Listado de tópicos disponibles |
+| `/hub`   | POST / DELETE | Suscripción a eventos y eliminación de subscripciones |
+
+## 📬 Autor
+
+**Carlos Torres**  
+Arquitecto de Integración  
+GitHub: [@carlostorresr](https://github.com/carlostorresr)
+
+> Proyecto basado en el repositorio oficial [tmforum-oda/oda-canvas](https://github.com/tmforum-oda/oda-canvas) con personalizaciones propias.
