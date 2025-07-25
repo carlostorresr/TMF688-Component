@@ -1,0 +1,31 @@
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+component:
+  # Specifies whether a service account should be created
+  id: TMFC005
+  name: eventmanagement
+  functionalBlock: Production
+  publicationDate: 2023-08-22T00:00:00.000Z
+  version: "1.0.1"
+  storageClassName: default
+image:
+  repository: cjtorresr/tmf688-component
+  tag: v10
+  pullPolicy: IfNotPresent
+security:
+  controllerRole: Admin
+service:
+  type: ClusterIP
+  port: 8080
+mongodb:
+  enabled: true
+  image: mongo
+  port: 27017
+  database: tmf
+partyrole:
+  image: dominico/partyroleapi:latest
+  versionlabel: partyroleapi-1.0
+env:
+  KAFKA_BROKER: kafka:9092
+  KAFKA_TOPIC: tmf688-events
